@@ -4,7 +4,6 @@ import com.google.common.collect.ImmutableList;
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-import com.ticketer.controller.PersonController;
 import com.ticketer.service.api.PersonService;
 import com.ticketer.service.impl.PersonServiceImpl;
 import io.dropwizard.Application;
@@ -17,6 +16,8 @@ import org.hibernate.SessionFactory;
 import org.reflections.Reflections;
 
 import javax.persistence.Entity;
+import javax.ws.rs.Path;
+import java.util.Set;
 
 /**
  * Created by akshay.kesarwan on 04/10/16.
@@ -28,11 +29,12 @@ public class TicketerApplication extends Application<TicketerConfiguration> {
         new TicketerApplication().run(args);
     }
 
-    HibernateBundle<TicketerConfiguration> hibernateBundle = null;
+    private HibernateBundle<TicketerConfiguration> hibernateBundle = null;
+    private final static String PACKAGE_URL = "com.ticketer";
 
     @Override
     public void initialize(Bootstrap<TicketerConfiguration> bootstrap) {
-        Reflections reflections = new Reflections("com.ticketer");
+        Reflections reflections = new Reflections(PACKAGE_URL);
         ImmutableList<Class<?>> entities = ImmutableList.copyOf(reflections.getTypesAnnotatedWith(Entity.class));
         hibernateBundle = new HibernateBundle<TicketerConfiguration>(entities, new SessionFactoryFactory()) {
             @Override
@@ -52,7 +54,11 @@ public class TicketerApplication extends Application<TicketerConfiguration> {
                 bind(PersonService.class).to(PersonServiceImpl.class).asEagerSingleton();
             }
         });
-        environment.jersey().register(injector.getInstance(PersonController.class));
+        Reflections reflections = new Reflections(PACKAGE_URL);
+        Set<Class<?>> controllers = reflections.getTypesAnnotatedWith(Path.class);
+        System.out.println(controllers);
+        for(Class<?> controller : controllers)
+            environment.jersey().register(injector.getInstance(controller));
     }
 
 }

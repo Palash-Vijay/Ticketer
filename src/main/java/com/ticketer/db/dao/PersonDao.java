@@ -1,4 +1,4 @@
-package com.ticketer.db.dao.impl;
+package com.ticketer.db.dao;
 
 import com.google.inject.Inject;
 import com.ticketer.db.model.entities.Person;
@@ -10,14 +10,10 @@ import java.util.List;
 /**
  * Created by akshay.kesarwan on 04/10/16.
  */
-public class PersonDaoImpl extends AbstractDAO<Person> {
-    /**
-     * Creates a new DAO with a given session provider.
-     *
-     * @param sessionFactory a session provider
-     */
+public class PersonDao extends AbstractDAO<Person> {
+
     @Inject
-    public PersonDaoImpl(SessionFactory sessionFactory) {
+    public PersonDao(SessionFactory sessionFactory) {
         super(sessionFactory);
     }
 

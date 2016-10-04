@@ -1,7 +1,7 @@
 package com.ticketer.service.impl;
 
 import com.google.inject.Inject;
-import com.ticketer.db.dao.impl.PersonDaoImpl;
+import com.ticketer.db.dao.PersonDao;
 import com.ticketer.db.model.entities.Person;
 import com.ticketer.service.api.PersonService;
 import org.slf4j.Logger;
@@ -15,10 +15,10 @@ public class PersonServiceImpl implements PersonService {
 
     Logger logger = LoggerFactory.getLogger(PersonServiceImpl.class);
 
-    PersonDaoImpl personDao;
+    PersonDao personDao;
 
     @Inject
-    public PersonServiceImpl(PersonDaoImpl personDao) {
+    public PersonServiceImpl(PersonDao personDao) {
         this.personDao = personDao;
     }
 
